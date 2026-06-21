@@ -9,25 +9,24 @@ class Status(commands.Cog):
         self.bot = bot
 
     @app_commands.command()
-    @app_commands.describe(status="The text to set the custom status to")
-    async def setstatus(self, ctx, interaction: discord.Interaction, status: str):
+    @app_commands.describe(text="The text to set the custom status to")
+    async def setstatus(self, ctx, interaction: discord.Interaction, text: str):
         """Set a custom status for the bot"""
-        if len(status) > 128:
+        if len(text) > 128:
             activity = None
             await interaction.response.send_message("Status must be 128 characters or less.", ephemeral=True)
             return
         else:
-            if status == "none":
+            if text == "none":
                 activity = None
             else:
-                activity = status
-        online = ctx.bot.guilds[0].me.status if len(ctx.bot.guilds) > 0 else discord.Status.online
-        await ctx.bot.change_presence(status=online, activity=activity)
+                activity = text
+        status = ctx.bot.guilds[0].me.status if len(ctx.bot.guilds) > 0 else discord.Status.online
+        await ctx.bot.change_presence(status=status, activity=activity)
         if activity:
-            await ctx.send(_("Custom status set to `{activity}`.").format(activity=activity))
+            await interaction.response.send_message(f"Status set to: {activity}", ephemeral=True)
         else:
-            await ctx.send(_("Custom status cleared."))
-        #await interaction.response.send_message(f"Status set to: {activity}", ephemeral=True)
+            await interaction.response.send_message("Custom status cleared.", ephemeral=True)
 
     @commands.command()
     async def pinging(self, ctx):
