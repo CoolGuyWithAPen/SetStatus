@@ -9,8 +9,10 @@ class Status(commands.Cog):
         self.bot = bot
 
     @app_commands.command()
-    async def setstatus(self, interaction: discord.Interaction):
-        await interaction.response.send_message("Status set!", ephemeral=True)
+    @app_commands.describe(status="The text to set the custom status to")
+    async def setstatus(self, interaction: discord.Interaction, status: str):
+        """Set a custom status for the bot"""
+        await interaction.response.send_message(f"Status set to: {status}", ephemeral=True)
 
     @commands.command()
     async def pinging(self, ctx):
