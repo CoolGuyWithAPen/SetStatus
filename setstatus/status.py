@@ -21,7 +21,7 @@ class Status(commands.Cog):
                 activity = None
             else:
                 activity = status
-        online = discord.Status.online
+        online = ctx.bot.guilds[0].me.status if len(ctx.bot.guilds) > 0 else discord.Status.online
         await ctx.bot.change_presence(status=online, activity=activity)
         await interaction.response.send_message(f"Status set to: {activity}", ephemeral=True)
 
